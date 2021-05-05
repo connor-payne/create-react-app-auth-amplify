@@ -102,11 +102,14 @@ export default function SignInSide(props) {
         const user = await Auth.signIn(formData.email, formData.password);
         console.log(user);
         if (user.username) {
-          try {
-            await createCompany(formData.email, "Manager", formData.companyName);
-        } catch (error) {
-            console.log('error signing up:', error);
-        } 
+          const cognitoUser = await Auth.currentAuthenticatedUser()
+          if (cognitoUser.attributes['custom:savedInDB'] === 'false') {
+            try {
+              await createCompany(formData.email, "Manager", formData.companyName);
+            } catch (error) {
+                console.log('error signing up:', error);
+            } 
+          }  
         }
     } catch (error) {
         if(error.code === "UserNotConfirmedException") {

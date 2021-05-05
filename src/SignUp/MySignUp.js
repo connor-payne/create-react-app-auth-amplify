@@ -193,6 +193,8 @@ export default function MySignUp(props) {
           password,
           attributes: {
             email: email,          // optional
+            'custom:companyName': companyName,
+            'custom:savedInDB': 'false'
             // other custom attributes 
         }
       })

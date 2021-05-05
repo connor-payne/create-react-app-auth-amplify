@@ -12,7 +12,9 @@ export async function getUserByEmail(email) {
     return user[0]
 };
 
-export async function createCompany(email, userType, companyName) {
+export async function createCompany(email, userType) {
+    const cognitoUser = await Auth.currentAuthenticatedUser()
+    console.log(cognitoUser.attributes['custom:companyName'])
     console.debug("attempting company creation")
     const user = (await DataStore.query(User))
     .filter(a => a.email === email);
@@ -22,7 +24,7 @@ export async function createCompany(email, userType, companyName) {
 
     const company = await DataStore.save(
         new Company({
-            "companyName": companyName,
+            "companyName": cognitoUser.attributes['custom:companyName'],
             "Users": []
         })
     );
@@ -35,6 +37,9 @@ export async function createCompany(email, userType, companyName) {
             "companyID": company.id
         })
     );
+    await Auth.updateUserAttributes(cognitoUser, {
+        'custom:savedInDB': 'true'
+      });
     console.log(res);
     return res;
 };
