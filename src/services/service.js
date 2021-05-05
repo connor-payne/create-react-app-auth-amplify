@@ -13,6 +13,12 @@ export async function getUserByEmail(email) {
 };
 
 export async function createCompany(email, userType, companyName) {
+    console.debug("attempting company creation")
+    const user = (await DataStore.query(User))
+    .filter(a => a.email === email);
+    if (user.length > 0) {
+        return "user already exists"
+    }
 
     const company = await DataStore.save(
         new Company({

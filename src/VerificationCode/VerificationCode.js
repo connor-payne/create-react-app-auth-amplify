@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { Auth } from 'aws-amplify';
-import { createCompany } from '../services/service';
+
 import Button from '@material-ui/core/Button';
 
 
@@ -55,11 +55,6 @@ export default function VerificationCode(props) {
           console.log(confirm)
           if (confirm === 'SUCCESS') {
           setSucess(true);
-            try {
-                await createCompany(props.email, "Manager", props.companyName);
-            } catch (error) {
-                console.log('error signing up:', error);
-            } 
           }
         } catch (error) {
             console.log('error confirming sign up', error);
