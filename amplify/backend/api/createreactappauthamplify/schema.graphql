@@ -1,0 +1,44 @@
+type Company @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  companyName: String
+  Users: [User] @connection(keyName: "byCompany", fields: ["id"])
+  Properties: [Property] @connection(keyName: "byCompany", fields: ["id"])
+}
+
+type Report @model @auth(rules: [{allow: private}]) @key(name: "byTag", fields: ["tagID"]) {
+  id: ID!
+  serviceDate: AWSTimestamp
+  servicerName: String
+  serviceType: String
+  serviceNotes: String
+  tagID: ID
+}
+
+type Property @model @auth(rules: [{allow: private, operations: [read, create, update, delete]}]) @key(name: "byCompany", fields: ["companyID"]) {
+  id: ID!
+  propertyCity: String!
+  propertyAddress: String!
+  propertyState: String!
+  propertyZip: String!
+  lastServiceDate: AWSTimestamp
+  tags: [Tag] @connection(keyName: "byProperty", fields: ["id"])
+  companyID: ID
+}
+
+type Tag @model @auth(rules: [{allow: private}]) @key(name: "byProperty", fields: ["propertyID"]) {
+  id: ID!
+  unitMake: String!
+  unitModel: String!
+  lastServiceDate: String!
+  description: String!
+  propertyID: ID
+  Reports: [Report] @connection(keyName: "byTag", fields: ["id"])
+}
+
+type User @model @auth(rules: [{allow: private}]) @key(name: "byCompany", fields: ["companyID"]) {
+  id: ID!
+  userType: String!
+  email: AWSEmail
+  companyID: ID
+}
+ 

@@ -1,0 +1,463 @@
+type Company @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  companyName: String
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  Properties(filter: ModelPropertyFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPropertyConnection @aws_iam @aws_cognito_user_pools
+  Users(filter: ModelUserFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserConnection @aws_iam @aws_cognito_user_pools
+}
+
+type Report @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  serviceDate: AWSTimestamp
+  servicerName: String
+  serviceType: String
+  serviceNotes: String
+  tagID: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Property @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  propertyCity: String!
+  propertyAddress: String!
+  propertyState: String!
+  propertyZip: String!
+  lastServiceDate: AWSTimestamp
+  companyID: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  tags(filter: ModelTagFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTagConnection @aws_iam @aws_cognito_user_pools
+}
+
+type Tag @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  unitMake: String!
+  unitModel: String!
+  lastServiceDate: String!
+  description: String!
+  propertyID: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  Reports(filter: ModelReportFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReportConnection @aws_iam @aws_cognito_user_pools
+}
+
+type User @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  userType: String!
+  email: AWSEmail
+  companyID: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCompanyConnection @aws_iam @aws_cognito_user_pools {
+  items: [Company]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelCompanyFilterInput {
+  id: ModelIDInput
+  companyName: ModelStringInput
+  and: [ModelCompanyFilterInput]
+  or: [ModelCompanyFilterInput]
+  not: ModelCompanyFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getCompany(id: ID!): Company @aws_iam @aws_cognito_user_pools
+  listCompanys(filter: ModelCompanyFilterInput, limit: Int, nextToken: String): ModelCompanyConnection @aws_iam @aws_cognito_user_pools
+  syncCompanies(filter: ModelCompanyFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCompanyConnection @aws_iam @aws_cognito_user_pools
+  getReport(id: ID!): Report @aws_iam @aws_cognito_user_pools
+  listReports(filter: ModelReportFilterInput, limit: Int, nextToken: String): ModelReportConnection @aws_iam @aws_cognito_user_pools
+  syncReports(filter: ModelReportFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelReportConnection @aws_iam @aws_cognito_user_pools
+  getProperty(id: ID!): Property @aws_iam @aws_cognito_user_pools
+  listPropertys(filter: ModelPropertyFilterInput, limit: Int, nextToken: String): ModelPropertyConnection @aws_iam @aws_cognito_user_pools
+  syncProperties(filter: ModelPropertyFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPropertyConnection @aws_iam @aws_cognito_user_pools
+  getTag(id: ID!): Tag @aws_iam @aws_cognito_user_pools
+  listTags(filter: ModelTagFilterInput, limit: Int, nextToken: String): ModelTagConnection @aws_iam @aws_cognito_user_pools
+  syncTags(filter: ModelTagFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTagConnection @aws_iam @aws_cognito_user_pools
+  getUser(id: ID!): User @aws_iam @aws_cognito_user_pools
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_iam @aws_cognito_user_pools
+  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection @aws_iam @aws_cognito_user_pools
+}
+
+input CreateCompanyInput {
+  id: ID
+  companyName: String
+  _version: Int
+}
+
+input UpdateCompanyInput {
+  id: ID!
+  companyName: String
+  _version: Int
+}
+
+input DeleteCompanyInput {
+  id: ID
+  _version: Int
+}
+
+type Mutation {
+  createCompany(input: CreateCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_iam @aws_cognito_user_pools
+  updateCompany(input: UpdateCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_iam @aws_cognito_user_pools
+  deleteCompany(input: DeleteCompanyInput!, condition: ModelCompanyConditionInput): Company @aws_iam @aws_cognito_user_pools
+  createReport(input: CreateReportInput!, condition: ModelReportConditionInput): Report @aws_iam @aws_cognito_user_pools
+  updateReport(input: UpdateReportInput!, condition: ModelReportConditionInput): Report @aws_iam @aws_cognito_user_pools
+  deleteReport(input: DeleteReportInput!, condition: ModelReportConditionInput): Report @aws_iam @aws_cognito_user_pools
+  createProperty(input: CreatePropertyInput!, condition: ModelPropertyConditionInput): Property @aws_iam @aws_cognito_user_pools
+  updateProperty(input: UpdatePropertyInput!, condition: ModelPropertyConditionInput): Property @aws_iam @aws_cognito_user_pools
+  deleteProperty(input: DeletePropertyInput!, condition: ModelPropertyConditionInput): Property @aws_iam @aws_cognito_user_pools
+  createTag(input: CreateTagInput!, condition: ModelTagConditionInput): Tag @aws_iam @aws_cognito_user_pools
+  updateTag(input: UpdateTagInput!, condition: ModelTagConditionInput): Tag @aws_iam @aws_cognito_user_pools
+  deleteTag(input: DeleteTagInput!, condition: ModelTagConditionInput): Tag @aws_iam @aws_cognito_user_pools
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+}
+
+input ModelCompanyConditionInput {
+  companyName: ModelStringInput
+  and: [ModelCompanyConditionInput]
+  or: [ModelCompanyConditionInput]
+  not: ModelCompanyConditionInput
+}
+
+type Subscription {
+  onCreateCompany: Company @aws_subscribe(mutations: ["createCompany"]) @aws_iam @aws_cognito_user_pools
+  onUpdateCompany: Company @aws_subscribe(mutations: ["updateCompany"]) @aws_iam @aws_cognito_user_pools
+  onDeleteCompany: Company @aws_subscribe(mutations: ["deleteCompany"]) @aws_iam @aws_cognito_user_pools
+  onCreateReport: Report @aws_subscribe(mutations: ["createReport"]) @aws_iam @aws_cognito_user_pools
+  onUpdateReport: Report @aws_subscribe(mutations: ["updateReport"]) @aws_iam @aws_cognito_user_pools
+  onDeleteReport: Report @aws_subscribe(mutations: ["deleteReport"]) @aws_iam @aws_cognito_user_pools
+  onCreateProperty: Property @aws_subscribe(mutations: ["createProperty"]) @aws_iam @aws_cognito_user_pools
+  onUpdateProperty: Property @aws_subscribe(mutations: ["updateProperty"]) @aws_iam @aws_cognito_user_pools
+  onDeleteProperty: Property @aws_subscribe(mutations: ["deleteProperty"]) @aws_iam @aws_cognito_user_pools
+  onCreateTag: Tag @aws_subscribe(mutations: ["createTag"]) @aws_iam @aws_cognito_user_pools
+  onUpdateTag: Tag @aws_subscribe(mutations: ["updateTag"]) @aws_iam @aws_cognito_user_pools
+  onDeleteTag: Tag @aws_subscribe(mutations: ["deleteTag"]) @aws_iam @aws_cognito_user_pools
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"]) @aws_iam @aws_cognito_user_pools
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"]) @aws_iam @aws_cognito_user_pools
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"]) @aws_iam @aws_cognito_user_pools
+}
+
+type ModelReportConnection @aws_iam @aws_cognito_user_pools {
+  items: [Report]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelReportFilterInput {
+  id: ModelIDInput
+  serviceDate: ModelIntInput
+  servicerName: ModelStringInput
+  serviceType: ModelStringInput
+  serviceNotes: ModelStringInput
+  tagID: ModelIDInput
+  and: [ModelReportFilterInput]
+  or: [ModelReportFilterInput]
+  not: ModelReportFilterInput
+}
+
+input CreateReportInput {
+  id: ID
+  serviceDate: AWSTimestamp
+  servicerName: String
+  serviceType: String
+  serviceNotes: String
+  tagID: ID
+  _version: Int
+}
+
+input UpdateReportInput {
+  id: ID!
+  serviceDate: AWSTimestamp
+  servicerName: String
+  serviceType: String
+  serviceNotes: String
+  tagID: ID
+  _version: Int
+}
+
+input DeleteReportInput {
+  id: ID
+  _version: Int
+}
+
+input ModelReportConditionInput {
+  serviceDate: ModelIntInput
+  servicerName: ModelStringInput
+  serviceType: ModelStringInput
+  serviceNotes: ModelStringInput
+  tagID: ModelIDInput
+  and: [ModelReportConditionInput]
+  or: [ModelReportConditionInput]
+  not: ModelReportConditionInput
+}
+
+type ModelPropertyConnection @aws_iam @aws_cognito_user_pools {
+  items: [Property]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPropertyFilterInput {
+  id: ModelIDInput
+  propertyCity: ModelStringInput
+  propertyAddress: ModelStringInput
+  propertyState: ModelStringInput
+  propertyZip: ModelStringInput
+  lastServiceDate: ModelIntInput
+  companyID: ModelIDInput
+  and: [ModelPropertyFilterInput]
+  or: [ModelPropertyFilterInput]
+  not: ModelPropertyFilterInput
+}
+
+input CreatePropertyInput {
+  id: ID
+  propertyCity: String!
+  propertyAddress: String!
+  propertyState: String!
+  propertyZip: String!
+  lastServiceDate: AWSTimestamp
+  companyID: ID
+  _version: Int
+}
+
+input UpdatePropertyInput {
+  id: ID!
+  propertyCity: String
+  propertyAddress: String
+  propertyState: String
+  propertyZip: String
+  lastServiceDate: AWSTimestamp
+  companyID: ID
+  _version: Int
+}
+
+input DeletePropertyInput {
+  id: ID
+  _version: Int
+}
+
+input ModelPropertyConditionInput {
+  propertyCity: ModelStringInput
+  propertyAddress: ModelStringInput
+  propertyState: ModelStringInput
+  propertyZip: ModelStringInput
+  lastServiceDate: ModelIntInput
+  companyID: ModelIDInput
+  and: [ModelPropertyConditionInput]
+  or: [ModelPropertyConditionInput]
+  not: ModelPropertyConditionInput
+}
+
+type ModelTagConnection @aws_iam @aws_cognito_user_pools {
+  items: [Tag]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTagFilterInput {
+  id: ModelIDInput
+  unitMake: ModelStringInput
+  unitModel: ModelStringInput
+  lastServiceDate: ModelStringInput
+  description: ModelStringInput
+  propertyID: ModelIDInput
+  and: [ModelTagFilterInput]
+  or: [ModelTagFilterInput]
+  not: ModelTagFilterInput
+}
+
+input CreateTagInput {
+  id: ID
+  unitMake: String!
+  unitModel: String!
+  lastServiceDate: String!
+  description: String!
+  propertyID: ID
+  _version: Int
+}
+
+input UpdateTagInput {
+  id: ID!
+  unitMake: String
+  unitModel: String
+  lastServiceDate: String
+  description: String
+  propertyID: ID
+  _version: Int
+}
+
+input DeleteTagInput {
+  id: ID
+  _version: Int
+}
+
+input ModelTagConditionInput {
+  unitMake: ModelStringInput
+  unitModel: ModelStringInput
+  lastServiceDate: ModelStringInput
+  description: ModelStringInput
+  propertyID: ModelIDInput
+  and: [ModelTagConditionInput]
+  or: [ModelTagConditionInput]
+  not: ModelTagConditionInput
+}
+
+type ModelUserConnection @aws_iam @aws_cognito_user_pools {
+  items: [User]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  userType: ModelStringInput
+  email: ModelStringInput
+  companyID: ModelIDInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input CreateUserInput {
+  id: ID
+  userType: String!
+  email: AWSEmail
+  companyID: ID
+  _version: Int
+}
+
+input UpdateUserInput {
+  id: ID!
+  userType: String
+  email: AWSEmail
+  companyID: ID
+  _version: Int
+}
+
+input DeleteUserInput {
+  id: ID
+  _version: Int
+}
+
+input ModelUserConditionInput {
+  userType: ModelStringInput
+  email: ModelStringInput
+  companyID: ModelIDInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}

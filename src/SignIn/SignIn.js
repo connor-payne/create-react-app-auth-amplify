@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import { createCompany } from '../services/service';
 
 import { Auth } from 'aws-amplify';
 
@@ -99,6 +100,14 @@ export default function SignInSide(props) {
     event.preventDefault();
     try {
         const user = await Auth.signIn(formData.email, formData.password);
+        console.log(user);
+        if (user.username) {
+          try {
+            await createCompany(formData.email, "Manager", formData.companyName);
+        } catch (error) {
+            console.log('error signing up:', error);
+        } 
+        }
     } catch (error) {
         if(error.code === "UserNotConfirmedException") {
           console.log("SHOULD PROMPT CODE VERIFICATION")
