@@ -16,6 +16,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import { createTag } from '../services/service';
+import QRCode from './QRCode';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -111,6 +112,7 @@ export default function BasicTable(props) {
 const body = (
   <div style={modalStyle} className={classes.paper}>
     <Title>Add Property</Title>
+    <QRCode />
     <Grid container className={classes.form}>
       <Grid item xs={12}>
         <TextField 
